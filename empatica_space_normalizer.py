@@ -21,28 +21,28 @@ from my_utils import logWriter
 
 from pynput.keyboard import Key, Listener
 
-EDA_max = 1
-def on_press(key):
-  print('{0} pressed'.format(
-      key))
-  if key == Key.space:
-    print("Space pressed, resetting EDA normalization.")
-    EDA_max = 1  
+# EDA_max = 1
+#def on_press(key):
+  #print('{0} pressed'.format(
+      #key))
+  #if key == Key.space:
+    #print("Space pressed, resetting EDA normalization.")
+    #EDA_max = 1  
     
   
 
-def on_release(key):
-  print('{0} release'.format(
-      key))
-  if key == Key.esc:
-    # Stop listener
-    return False
+#def on_release(key):
+  #print('{0} release'.format(
+      #key))
+  #if key == Key.esc:
+    ## Stop listener
+    #return False
 
-# Collect events until released
-with Listener(
-  on_press=on_press,
-        on_release=on_release) as listener:
-  listener.join()
+## Collect events until released
+#with Listener(
+  #on_press=on_press,
+        #on_release=on_release) as listener:
+  #listener.join()
 
 
 
@@ -123,7 +123,7 @@ if __name__ == "__main__":
 
   
   # we are going to make a veyr quick hack for normalizing the EDA
-#  EDA_max = 1
+  EDA_max = 1
   EDA_counter = 0
   EDA_BASELINE_LENGTH = 20
   
