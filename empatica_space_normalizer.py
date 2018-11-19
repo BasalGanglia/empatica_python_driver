@@ -19,40 +19,15 @@ from pythonosc import udp_client
 from struct import *
 from my_utils import logWriter
 
-from pynput.keyboard import Key, Listener
-
-# EDA_max = 1
-#def on_press(key):
-  #print('{0} pressed'.format(
-      #key))
-  #if key == Key.space:
-    #print("Space pressed, resetting EDA normalization.")
-    #EDA_max = 1  
-    
-  
-
-#def on_release(key):
-  #print('{0} release'.format(
-      #key))
-  #if key == Key.esc:
-    ## Stop listener
-    #return False
-
-## Collect events until released
-#with Listener(
-  #on_press=on_press,
-        #on_release=on_release) as listener:
-  #listener.join()
-
 
 
 EMPATICA_ADDRESS = "127.0.0.1"
-EMPATICA_PORT = 9999
+EMPATICA_PORT = 28000
 
-ADDRESS1 = "192.168.0.130"
-#ADDRESS1 = "127.0.0.1"
+# ADDRESS1 = "192.168.0.130"
+ADDRESS1 = "127.0.0.1"
 
-PORT1 = 8001
+PORT1 = 5012
 
 #OSCADDRESS = "/empatica"
 
@@ -68,10 +43,15 @@ if __name__ == "__main__":
   
   the_logger = logWriter(logfilename)
   the_logger.log_msg("Testing the logger")
+
+  
   def signal_handler(signal, frame):
-      print( "caught a signal")
-      global interrupter
-      interrupter = True
+      print( "caught a signal.{0}".format(signal))
+      if signal == signal.SIGINT:
+        print("signal was sigint")        
+        global interrupter        
+        interrupter = True
+      
      
   signal.signal(signal.SIGINT, signal_handler)
   signal.signal(signal.SIGTERM, signal_handler)
@@ -95,28 +75,24 @@ if __name__ == "__main__":
   # Then subscribe to the physiological signals you wish to record:
   
   sock.sendall("device_subscribe gsr ON\r\n".encode())
-   
-  #time.sleep(1)
+  time.sleep(1)
+  
+  
   #sock.sendall("device_subscribe bat ON\r\n".encode())
   
   #time.sleep(1)
   #sock.sendall("device_subscribe bvp ON\r\n".encode())
-  time.sleep(1)
+#  time.sleep(1)
 #  sock.sendall("device_subscribe acc ON\r\n".encode())
   #time.sleep(1)
   #sock.sendall("device_subscribe tmp ON\r\n".encode())
   
 
   #  Connect to Unity/Max whatever for real-time processing of the data:
-#  client1 = udp_client.SimpleUDPClient(ADDRESS1, PORT1)
-
-  
-  
+  client1 = udp_client.SimpleUDPClient(ADDRESS1, PORT1)
   #logWrite = UnicodeWriter(logfilename, dialect=csv.excel, encoding="utf-8")
   #logWrite.writerow("Testing the logger")
   #logfile_handle = open('eggs.csv', 'rb') as c
-
-
 # open('eggs.csv', 'rb') as csvfile
 
 
@@ -228,6 +204,9 @@ if __name__ == "__main__":
                   
                   client1.send(msg)
       #           client1.send_message("/empatica/acc", "1, 2, 3")
+  print("Closing connection to empatica")
+  sock.close()
+
   the_logger.close_it_all()
   
 
